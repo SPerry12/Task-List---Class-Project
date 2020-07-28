@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Dynamic;
 using System.IO;
 using System.Threading.Tasks;
@@ -9,69 +10,57 @@ namespace Tracking_App_2._0
 {
     class Program
     {
+        
+        
         static void Main(string[] args)
         {
+            List<string> taskList = ReadListFromFile();
+            PrintTaskList(taskList);
 
-            
-        }
-
-        private static void AddTasks(List<string> tasks)
-        {
-            Console.Write("Add task: ");
-            var input = Console.ReadLine();
-            tasks.Add(input);
-        }
-
-        public void Run()
-        {
-            List<string> tasks = ReadListFromFile();
-            PrintTasks(tasks);
+            var quit = false;
 
             do
             {
-
-                PrintTasks(tasks);
-                AddTasks(tasks);
-
-            } while (true);
-
-            WriteListToFile(tasks);
+                PrintTaskList(taskList);
+                InputTaskToList(taskList);
+            } while (!quit);
         }
 
-
-
-        private void PrintTasks(List<string> tasks)
+        private static void InputTaskToList(List<string> taskList)
         {
-            foreach (var t in tasks)
+            Console.WriteLine("Add a new task: ");
+
+            var input = Console.ReadLine();
+            taskList.Add(input);
+        }
+
+        private static void PrintTaskList(List<string> taskList)
+        {
+            foreach (var t in taskList)
             {
                 Console.WriteLine(t);
             }
-
-            Console.WriteLine();
         }
 
-        st List<string> ReadListFromFile()
+        private static List<string> ReadListFromFile()
         {
-            var tasks = new List<string>();
+            var taskList = new List<string>();
 
-            using (StreamReader sr = new StreamReader(@"C: \Users\perry\OneDrive\Desktop\Task Project\TaskList.txt"))
+
+            try
             {
-                var input = sr.ReadLine();
-                tasks.Add(input);
-            }
-
-            return tasks;
-        }
-
-        static void WriteListToFile(List<string> tasks)
-        {
-            using (StreamWriter sw = new StreamWriter(@"C: \Users\perry\OneDrive\Desktop\Task Project\TaskList.txt"))
-            {
-                foreach (var t in tasks)
+                using (StreamReader sr = new StreamReader(@"C:\Users\perry\OneDrive\Desktop\Task Project\Task Project.txt"))
                 {
-                    sw.WriteLine(t);
+                    var input = sr.ReadLine();
+                    taskList.Add(input);
                 }
+
+               
             }
+            catch (FileNotFoundException)
+            { ; }
+
+            return taskList;
 
         }
     }
